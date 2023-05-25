@@ -1,0 +1,106 @@
+<%- include('../partials/adminHeader') %> <%-
+include('../partials/adminSidebar') %>
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Data Tables</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item">Tables</li>
+        <li class="breadcrumb-item active">Data</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Datatables</h5>
+            <!-- Table with stripped rows -->
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Tittle</th>
+                  <th scope="col">Summary</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Images</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+            <!-- End Table with stripped rows -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- End #main -->
+<!-- End #main -->
+<script>
+  const url = "/admin/api/foodList";
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      // Menghapus konten sebelumnya dalam tabel (opsional, jika perlu)
+      const tableBody = document.getElementById("tableBody");
+      tableBody.innerHTML = "";
+
+      // Iterasi melalui data dan membuat baris baru untuk setiap item
+      data.forEach((item) => {
+        // Membuat elemen-elemen HTML untuk setiap kolom data
+        const row = document.createElement("tr");
+        const idCell = document.createElement("td");
+        const titleCell = document.createElement("td");
+        const summaryCell = document.createElement("td");
+        const priceCell = document.createElement("td");
+        const categoryCell = document.createElement("td");
+        const actionCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+        const deleteIcon = document.createElement("i");
+
+        // Menetapkan nilai untuk setiap kolom data
+        idCell.textContent = item.id;
+        titleCell.textContent = item.title;
+        summaryCell.textContent = item.summary;
+        priceCell.textContent = item.price;
+        categoryCell.textContent = item.startDate;
+        deleteIcon.classList.add("bi", "bi-trash-fill");
+
+        // Menambahkan class dan atribut lainnya jika diperlukan
+        row.classList.add("data-row");
+        deleteButton.classList.add("btn", "btn-outline-secondary");
+
+        // Menambahkan ikon ke dalam tombol hapus
+        deleteButton.appendChild(deleteIcon);
+
+        // Menambahkan event listener untuk tombol hapus jika diperlukan
+        deleteButton.addEventListener("click", () => {
+          // Aksi yang ingin Anda lakukan saat tombol hapus diklik
+        });
+
+        // Menyatukan elemen-elemen ke dalam struktur tabel
+        actionCell.appendChild(deleteButton);
+        row.appendChild(idCell);
+        row.appendChild(titleCell);
+        row.appendChild(summaryCell);
+        row.appendChild(priceCell);
+        row.appendChild(startDateCell);
+        row.appendChild(actionCell);
+
+        // Menambahkan baris ke dalam tbody tabel
+        tableBody.appendChild(row);
+      });
+    })
+    .catch((error) => {
+      console.error("Terjadi kesalahan:", error);
+    });
+</script>
+<%- include('../partials/adminFooter') %>

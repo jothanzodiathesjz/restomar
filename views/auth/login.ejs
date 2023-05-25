@@ -1,0 +1,48 @@
+<%- include('../partials/header') %>
+
+<div id="login" class="container-fluid py-5 min-vh-100 bg-dark">
+  <div class="container">
+    <div class="row flex justify-content-center align-items-center">
+      <div
+        class="col-12 col-lg-6 d-flex align-items-center justify-content-center mt-5"
+      >
+        <div id="myForm" class="bg-gradient rounded rounded-4 p-5 mt-5 w-75">
+          <h1 class="text-center">Login</h1>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="username" class="form-control" />
+            <label class="form-label" for="form2Example1">Username</label>
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-4">
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              autocomplete="current-password"
+            />
+            <label class="form-label" for="form2Example2">Password</label>
+          </div>
+
+          <!-- 2 column grid layout for inline styling -->
+          <div class="row mb-4">
+            <div class="col">
+              <!-- Simple link -->
+              <a href="/register">Register</a>
+            </div>
+          </div>
+
+          <!-- Submit button -->
+          <button onclick="loginUser()" class="btn btn-primary btn-block mb-4">
+            Sign in
+          </button>
+
+          <!-- Register buttons -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

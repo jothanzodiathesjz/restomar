@@ -1,0 +1,89 @@
+<%- include('../partials/adminHeader') %> <%-
+include('../partials/adminSidebar') %>
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Category</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item">Tables</li>
+        <li class="breadcrumb-item active">General</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <% if (type === 'tambah') { %>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Category</h5>
+
+            <div id="formAdd" action="">
+              <div class="row mb-3">
+                <label for="inputText" class="col-sm-2 col-form-label"
+                  >Category</label
+                >
+                <div class="col-lg-3 col-sm-3">
+                  <input type="text" class="form-control" />
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                  <button class="btn btn-danger">submit</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Default Table -->
+
+            <!-- End Default Table Example -->
+          </div>
+        </div>
+        <% } else { %>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Category</h5>
+            <div class="d-flex justify-content-end">
+              <a
+                href="/admin/category?type=tambah"
+                id="tambahCat"
+                class="btn btn-primary"
+              >
+                <span>Tambah</span>
+                <i class="bi bi-plus"></i>
+              </a>
+            </div>
+            <table id="catList" class="table">
+              <thead>
+                <tr>
+                  <th scope="col">id</th>
+                  <th scope="col">Category Name</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Brandon Jacob</td>
+                  <td>
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-trash-fill"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- End #main -->
+<!-- End #main -->
+<!-- End #main -->
+<!-- End #main -->
+<script></script>
+<%- include('../partials/adminFooter') %>

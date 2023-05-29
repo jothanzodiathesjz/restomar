@@ -1,4 +1,11 @@
-const { Users, Food, Category } = require("../models/index");
+const {
+  Users,
+  Food,
+  Category,
+  Table,
+  Order,
+  OrderItems,
+} = require("../models/index");
 const multer = require("multer");
 const path = require("path");
 
@@ -43,20 +50,40 @@ exports.adminAuth = (req, res, next) => {
   return next();
 };
 
-exports.foodView = (req, res) => {
+exports.foodView = async (req, res) => {
   const type = req.query.type;
+  const idFood = req.query.id;
+
   const query = (ass) => {
     if (ass === "tambah") {
       return "tambah";
+    } else if (ass === "edit") {
+      return "edit";
     } else {
       return "default";
     }
   };
   const typeCat = query(type);
-  res.render("admin/food", {
-    active: "food",
-    type: typeCat,
-  });
+  try {
+    if (idFood) {
+      const findFood = await Food.findByPk(idFood);
+      res.render("admin/food2", {
+        active: "food",
+        type: typeCat,
+        data: findFood,
+      });
+    } else {
+      res.render("admin/food2", {
+        active: "food",
+        type: typeCat,
+        data: idFood,
+      });
+    }
+  } catch (error) {
+    res.json({
+      message: "terjadi kesalahan",
+    });
+  }
 };
 
 exports.categoryView = (req, res) => {
@@ -143,39 +170,30 @@ exports.usersView = (req, res) => {
 };
 
 // CRUD API Controllers
+
+// foodApi
 exports.foodList = async (req, res) => {
   const { title, summary, price, images } = req.body;
   try {
-    const foodList = Food.findAll();
+    const foodList = await Food.findAll({
+      include: {
+        model: Category, // Nama model dari tabel Category
+        // Opsional, menentukan apakah JOIN yang dilakukan harus bersifat required atau tidak
+      },
+    });
     res.json({
       message: "successfull get data",
       data: foodList,
     });
   } catch (error) {
     res.json({
-      message: error,
-    });
-  }
-};
-
-exports.createCategory = async (req, res) => {
-  const categoryReq = req.body.category;
-  try {
-    const category = Category.create({
-      category: categoryReq,
-    });
-    res.status(200).json({
-      message: "successfull",
-    });
-  } catch (error) {
-    res.send({
-      message: error,
+      message: "terjadi kesalahan",
     });
   }
 };
 
 exports.createFood = async (req, res) => {
-  const { title, summary, price, categoryId } = req.body;
+  const { title, summary, price, id_category } = req.body;
   const filename = req.file.filename;
   const destination = "/food_images/" + filename;
   try {
@@ -184,16 +202,230 @@ exports.createFood = async (req, res) => {
       summary: summary,
       price: price,
       images: destination,
-      categoryId: categoryId,
+      id_category: id_category,
     });
     console.log(req.file);
     res.json({
       message: "successfull",
       data: foodCreate,
+      statusCode: 200,
     });
   } catch (error) {
     res.send({
       message: "terjadi kesalahan",
+    });
+  }
+};
+
+exports.editFood = async (req, res) => {
+  const idFood = req.params.id;
+  const { title, summary, price, id_category } = req.body;
+  const filename = req?.file?.filename;
+  const destination = "/food_images/" + filename;
+  try {
+    const food = await Food.findByPk(idFood);
+    if (food) {
+      // Food dengan ID yang cocok ditemukan, lakukan pembaruan data
+      food.title = title;
+      food.summary = summary;
+      food.price = price;
+      food.images = !filename ? food.images : destination;
+      food.id_category = id_category;
+
+      // Simpan perubahan ke dalam database
+      await food.save();
+
+      // Kirim respon berhasil ke client
+      return res
+        .status(200)
+        .json({ message: "Food updated successfully", statusCode: 200 });
+    }
+  } catch (error) {
+    res.send({
+      message: "terjadi kesalahan",
+    });
+  }
+};
+
+exports.deleteFood = async (req, res) => {
+  const idFood = req.params.id;
+  try {
+    const delFood = await Food.destroy({
+      where: {
+        id_food: idFood,
+      },
+    });
+    res.send({
+      message: "succesfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+      statusCode: 400,
+    });
+  }
+};
+
+// categoryApi
+exports.createCategory = async (req, res) => {
+  const categoryReq = req.body.category;
+  try {
+    const category = await Category.create({
+      category: categoryReq,
+    });
+    const id = category.id;
+    console.log(id);
+    res.status(200).json({
+      message: "successfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.send({
+      message: error,
+    });
+  }
+};
+
+exports.categoryList = async (req, res) => {
+  try {
+    const category = await Category.findAll();
+    res.send({
+      data: category,
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+    });
+  }
+};
+
+exports.deleteCategory = async (req, res) => {
+  const idcategory = req.params.id;
+  try {
+    const delFood = await Category.destroy({
+      where: {
+        id: idcategory,
+      },
+    });
+    res.send({
+      message: "succesfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+      statusCode: 400,
+    });
+  }
+};
+
+exports.editCategory = async (req, res) => {};
+
+// tableController
+exports.tableList = async (req, res) => {
+  try {
+    const table = await Table.findAll();
+    res.send({
+      data: table,
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+    });
+  }
+};
+
+exports.createTable = async (req, res) => {
+  const data = req.body;
+  try {
+    if (!data) {
+      res.send({
+        message: error,
+        statusCode: 400,
+      });
+    }
+    const table = await Table.create(data);
+    res.status(200).json({
+      message: "successfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.send({
+      message: error,
+    });
+  }
+};
+
+exports.deleteTable = async (req, res) => {
+  const idTable = req.params.id;
+  try {
+    const delFood = await Table.destroy({
+      where: {
+        id_table: idTable,
+      },
+    });
+    res.send({
+      message: "succesfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+      statusCode: 400,
+    });
+  }
+};
+
+// order Controller
+exports.orderCreate = async (req, res) => {
+  const { dataOrder, dataItem } = req.body;
+
+  try {
+    const createdOrder = await Order.create(dataOrder);
+    // Menyimpan data ke database menggunakan model Order
+    const orderId = createdOrder.id_order; // Mendapatkan ID yang baru saja dibuat
+    for (const item of dataItem) {
+      await OrderItems.create({
+        order_id: orderId,
+        food_id: item.food_id,
+        quantity: item.quantity,
+      });
+    }
+    // Menghitung total pembayaran berdasarkan item yang dipilih
+    const orderItems = await OrderItems.findAll({
+      where: { order_id: orderId },
+      include: [{ model: Food, attributes: ["price"] }],
+    });
+
+    let total_bayar = 0;
+    for (const orderItem of orderItems) {
+      total_bayar += orderItem.quantity * orderItem.food.price;
+    }
+
+    // Perbarui entri pesanan dalam tabel Orders dengan total pembayaran
+    await Order.update({ total_bayar }, { where: { id_order: orderId } });
+    res.status(200).json({
+      data: { dataOrder, dataItem },
+      orderId: orderId,
+      message: "Data reservation berhasil disimpan",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Terjadi kesalahan saat menyimpan data" });
+  }
+};
+
+exports.orderData = async (req, res) => {
+  try {
+    const orderData = await Order.findAll();
+    res.send({
+      data: orderData,
+      message: "successful get data",
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
     });
   }
 };

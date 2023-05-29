@@ -13,7 +13,7 @@ const Table = db.define(
         notEmpty: true,
       },
     },
-    noTable: DataTypes.INTEGER,
+    no_table: DataTypes.STRING,
     capacity: DataTypes.INTEGER,
     statusTable: {
       type: DataTypes.BOOLEAN,

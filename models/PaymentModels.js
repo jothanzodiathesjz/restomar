@@ -15,7 +15,7 @@ const Payment = db.define(
       },
     },
     status: DataTypes.STRING,
-    buktiPembayaran: DataTypes.STRING,
+    bukti_pembayaran: DataTypes.STRING,
   },
   {
     freezeTableName: true,
@@ -23,6 +23,6 @@ const Payment = db.define(
 );
 
 Order.hasMany(Payment);
-Payment.belongsTo(Order, { foreignKey: "id_order" });
+Payment.belongsTo(Order, { foreignKey: "order_id" });
 
 module.exports = Payment;

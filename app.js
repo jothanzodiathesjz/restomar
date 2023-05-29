@@ -21,6 +21,15 @@ app.use(
 );
 
 const { db, dbConnection } = require("./config/dbConnection.js");
+const {
+  Category,
+  Food,
+  Order,
+  OrderItems,
+  Payment,
+  Table,
+  Users,
+} = require("./models/index.js");
 const Router = require("./routes/index.js");
 
 app.set("view engine", "ejs");
@@ -31,6 +40,9 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 dbConnection();
+// (async () => {
+//   await db.sync({ alter: true });
+// })();
 
 app.use(Router);
 app.get("/", (req, res) => res.send("Hello World!"));

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Restoran - Bootstrap Restaurant Template</title>
+    <title>RestoMar - <%= currentPage %></title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="" name="keywords" />
     <meta content="" name="description" />
@@ -28,9 +28,12 @@
       rel="stylesheet"
     />
     <!-- sweet allert -->
-    <link href="
+    <link
+      href="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
-" rel="stylesheet">
+"
+      rel="stylesheet"
+    />
 
     <!-- Libraries Stylesheet -->
     <link href="/plugin2/lib/animate/animate.min.css" rel="stylesheet" />
@@ -109,9 +112,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
                 class="nav-item nav-link <%= (currentPage === 'menu' ) ? 'active ' : '' %>"
                 >Menu</a
               >
-              
+
               <% if (loggedIn) { %>
-                  <div class="nav-item dropdown">
+              <div class="nav-item dropdown">
                 <a
                   href="#"
                   class="nav-link dropdown-toggle"
@@ -121,19 +124,17 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
                 <div class="dropdown-menu m-0">
                   <a href="booking.html" class="dropdown-item">Booking</a>
                   <a href="team.html" class="dropdown-item">Our Team</a>
-                  <a href="/signout" class="dropdown-item"
-                    >Log out</a
-                  >
+                  <a href="/signout" class="dropdown-item">Log out</a>
                 </div>
               </div>
-                <% } else { %>
-                  <a href="/signin" class="nav-item nav-link">Login</a>
-                <% } %>
-              
+              <% } else { %>
+              <a href="/signin" class="nav-item nav-link">Login</a>
+              <% } %>
             </div>
             <a href="" class="btn btn-primary py-2 px-4">Book A Table</a>
           </div>
         </nav>
       </div>
     </div>
-  
+  </body>
+</html>

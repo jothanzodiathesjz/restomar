@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { db } = require("../config/dbConnection");
-const Menu = require("./MenuModels");
 const Table = require("./TableModels");
+const Users = require("./UsersModel");
 
 const Order = db.define(
   "order",
@@ -15,16 +15,17 @@ const Order = db.define(
         notEmpty: true,
       },
     },
-    totalBayar: DataTypes.INTEGER,
+    total_bayar: DataTypes.INTEGER,
+    tanggal_reservasi: DataTypes.DATE,
+    status_reservasi: DataTypes.ENUM("Pending", "Proses", "Selesai"),
   },
   {
     freezeTableName: true,
   }
 );
-
-Menu.hasMany(Order);
-Order.belongsTo(Menu, { foreignKey: "id_menu" });
 Table.hasMany(Order);
-Order.belongsTo(Table, { foreignKey: "id_table" });
+Order.belongsTo(Table, { foreignKey: "table_id" });
+Users.hasMany(Order);
+Order.belongsTo(Users, { foreignKey: "id_user" });
 
 module.exports = Order;

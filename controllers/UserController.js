@@ -62,7 +62,7 @@ const createUsers = async (req, res) => {
       password: password,
       telepone: telepone,
       gender: gender,
-      role: "admin",
+      role: "customer",
     });
 
     res.status(200).json({
@@ -108,7 +108,7 @@ const adminAuth = async (req, res) => {
 
     // Set session dengan username
     req.session.username = username;
-    req.session.role = "admin";
+    req.session.role = "user";
     // Mengirim respons berhasil
     res.status(200).json({ message: "Login berhasil", statusCode: 200 });
   } catch (error) {

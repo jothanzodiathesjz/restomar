@@ -17,6 +17,7 @@ include('../partials/adminSidebar') %>
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
+          <img src="" alt="" />
           <div class="card-body">
             <h5 class="card-title">Datatables</h5>
             <!-- Table with stripped rows -->
@@ -32,7 +33,36 @@ include('../partials/adminSidebar') %>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
-              <tbody id="tableBody"></tbody>
+              <tbody id="tableBody">
+                <% let nomor = 1; %> <% data.forEach((item) => { %>
+                <tr>
+                  <th scope="row"><%= nomor++ %></th>
+                  <td><%= item.title %></td>
+                  <td><%= item.summary %></td>
+                  <td><%= item.price %></td>
+                  <td>
+                    <img
+                      class="img-fluid rounded"
+                      style="width: 80px"
+                      src="<%= item.images %>"
+                      alt=""
+                    />
+                  </td>
+                  <td><%= item.category.category %></td>
+                  <td>
+                    <button
+                      onclick="deleteFood('<%= item.id_food %>')"
+                      class="btn btn-outline-secondary"
+                    >
+                      <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <a href="" class="btn btn-outline-secondary"
+                      ><i class="bi bi-pencil-fill"></i
+                    ></a>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
             </table>
             <!-- End Table with stripped rows -->
           </div>
@@ -44,63 +74,8 @@ include('../partials/adminSidebar') %>
 <!-- End #main -->
 <!-- End #main -->
 <script>
-  const url = "/admin/api/foodList";
-
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      // Menghapus konten sebelumnya dalam tabel (opsional, jika perlu)
-      const tableBody = document.getElementById("tableBody");
-      tableBody.innerHTML = "";
-
-      // Iterasi melalui data dan membuat baris baru untuk setiap item
-      data.forEach((item) => {
-        // Membuat elemen-elemen HTML untuk setiap kolom data
-        const row = document.createElement("tr");
-        const idCell = document.createElement("td");
-        const titleCell = document.createElement("td");
-        const summaryCell = document.createElement("td");
-        const priceCell = document.createElement("td");
-        const categoryCell = document.createElement("td");
-        const actionCell = document.createElement("td");
-        const deleteButton = document.createElement("button");
-        const deleteIcon = document.createElement("i");
-
-        // Menetapkan nilai untuk setiap kolom data
-        idCell.textContent = item.id;
-        titleCell.textContent = item.title;
-        summaryCell.textContent = item.summary;
-        priceCell.textContent = item.price;
-        categoryCell.textContent = item.startDate;
-        deleteIcon.classList.add("bi", "bi-trash-fill");
-
-        // Menambahkan class dan atribut lainnya jika diperlukan
-        row.classList.add("data-row");
-        deleteButton.classList.add("btn", "btn-outline-secondary");
-
-        // Menambahkan ikon ke dalam tombol hapus
-        deleteButton.appendChild(deleteIcon);
-
-        // Menambahkan event listener untuk tombol hapus jika diperlukan
-        deleteButton.addEventListener("click", () => {
-          // Aksi yang ingin Anda lakukan saat tombol hapus diklik
-        });
-
-        // Menyatukan elemen-elemen ke dalam struktur tabel
-        actionCell.appendChild(deleteButton);
-        row.appendChild(idCell);
-        row.appendChild(titleCell);
-        row.appendChild(summaryCell);
-        row.appendChild(priceCell);
-        row.appendChild(startDateCell);
-        row.appendChild(actionCell);
-
-        // Menambahkan baris ke dalam tbody tabel
-        tableBody.appendChild(row);
-      });
-    })
-    .catch((error) => {
-      console.error("Terjadi kesalahan:", error);
-    });
+  function deleteFood(idFood) {
+    console.log(idFood);
+  }
 </script>
 <%- include('../partials/adminFooter') %>

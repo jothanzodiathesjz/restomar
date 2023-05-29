@@ -15,68 +15,59 @@ include('../partials/adminSidebar') %>
 
   <section class="section">
     <div class="row">
-      <div class="col-lg-12">
-        <% if (type === 'tambah') { %>
+      <div class="col-lg-7">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Category</h5>
-
-            <div id="formAdd" action="">
-              <div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label"
-                  >Category</label
-                >
-                <div class="col-lg-3 col-sm-3">
-                  <input type="text" class="form-control" />
-                </div>
-                <div class="col-lg-3 col-sm-3">
-                  <button class="btn btn-danger">submit</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Default Table -->
-
-            <!-- End Default Table Example -->
-          </div>
-        </div>
-        <% } else { %>
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Category</h5>
-            <div class="d-flex justify-content-end">
-              <a
-                href="/admin/category?type=tambah"
-                id="tambahCat"
-                class="btn btn-primary"
-              >
-                <span>Tambah</span>
-                <i class="bi bi-plus"></i>
-              </a>
-            </div>
-            <table id="catList" class="table">
+            <table id="example" class="table table-striped" style="width: 100%">
               <thead>
                 <tr>
-                  <th scope="col">id</th>
-                  <th scope="col">Category Name</th>
-                  <th scope="col">Action</th>
+                  <th>Id</th>
+                  <th>Tittle</th>
+
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">1</th>
-                  <td>Brandon Jacob</td>
+                  <td>1</td>
+                  <td>Example Tittle</td>
+
                   <td>
                     <button class="btn btn-outline-secondary">
                       <i class="bi bi-trash-fill"></i>
                     </button>
+                    <a href="#" class="btn btn-outline-secondary">
+                      <i class="bi bi-pencil-fill"></i>
+                    </a>
                   </td>
                 </tr>
+                <!-- Tambahkan baris data lainnya sesuai kebutuhan -->
               </tbody>
             </table>
           </div>
         </div>
-        <% } %>
+      </div>
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Tambah Category</h5>
+
+            <form id="formAdd">
+              <div class="row mb-3">
+                <div class="col-lg-12">
+                  <label for="inputText" class="col-sm-2 col-form-label"
+                    >Category</label
+                  >
+                  <input type="text" class="form-control" id="inputCategory" />
+                </div>
+                <div class="col-lg-12 mt-3">
+                  <button type="submit" class="btn btn-danger">submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -85,5 +76,107 @@ include('../partials/adminSidebar') %>
 <!-- End #main -->
 <!-- End #main -->
 <!-- End #main -->
-<script></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#example").DataTable({
+      ajax: {
+        url: "/admin/api/categoryList",
+        type: "GET",
+      },
+      columns: [
+        {
+          data: null,
+          render: function (data, type, row, meta) {
+            // Mengambil nomor urut baris
+            var rowIndex = meta.row + meta.settings._iDisplayStart + 1;
+            return rowIndex;
+          },
+        },
+        { data: "category" },
+        {
+          data: "id",
+          render: function (data, type, row) {
+            var foodId = row.id; // Mengambil ID food dari data baris
+
+            // Tombol Hapus
+            var deleteButton =
+              '<button class="btn btn-outline-secondary delete-category-btn" data-category-id="' +
+              data +
+              '"><i class="bi bi-trash-fill"></i></button>';
+
+            return deleteButton;
+          },
+        },
+      ],
+    });
+  });
+
+  $(document).ready(function () {
+    $("#formAdd").submit(function (event) {
+      event.preventDefault();
+      var categoryInput = $("#inputCategory").val();
+      if (!categoryInput) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Form belum diisi",
+        });
+      } else {
+        fetch("/admin/api/createCategory", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            category: categoryInput,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.statusCode === 200) {
+              Swal.fire("Good job!", "Data berhasil ditambah", "success");
+            }
+            $("#example").DataTable().ajax.reload();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
+  });
+
+  $("#example").on("click", ".delete-category-btn", function () {
+    var catId = $(this).data("category-id");
+    // Mengirim permintaan penghapusan menggunakan fetch atau AJAX
+    fetch("/admin/api/deletecategory/" + catId, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // Handle respon dari server (berhasil atau gagal)
+        if (data.statusCode === 200) {
+          Swal.fire("Good job!", "Data berhasil dihapus", "success");
+        }
+
+        // Lakukan tindakan lain jika diperlukan
+        // Misalnya, refresh tabel atau tampilkan notifikasi
+        $("#example").DataTable().ajax.reload();
+      })
+      .catch((error) => {
+        // Tangani kesalahan jika terjadi
+        if (error.statusCode === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+        }
+        console.error(error);
+      });
+    console.log(catId);
+  });
+</script>
 <%- include('../partials/adminFooter') %>

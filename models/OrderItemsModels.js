@@ -1,12 +1,12 @@
 const { DataTypes } = require("sequelize");
 const { db } = require("../config/dbConnection");
-const Menu = require("./MenuModels");
+const Order = require("./OrderModels");
 const Food = require("./FoodModels");
 
-const Chart = db.define(
-  "chart",
+const OrderItems = db.define(
+  "order_items",
   {
-    id_chart: {
+    items_id: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.STRING,
@@ -15,16 +15,15 @@ const Chart = db.define(
         notEmpty: true,
       },
     },
-    qty: DataTypes.INTEGER,
+    quantity: DataTypes.INTEGER,
   },
   {
     freezeTableName: true,
   }
 );
+Order.hasMany(OrderItems);
+OrderItems.belongsTo(Order, { foreignKey: "order_id" });
+Food.hasMany(OrderItems);
+OrderItems.belongsTo(Food, { foreignKey: "food_id" });
 
-Menu.hasMany(Chart);
-Chart.belongsTo(Menu, { foreignKey: "id_menu" });
-Food.hasMany(Chart);
-Chart.belongsTo(Food, { foreignKey: "id_food" });
-
-module.exports = Chart;
+module.exports = OrderItems;

@@ -1,4 +1,4 @@
-const { Error } = require("sequelize");
+const { Error, where } = require("sequelize");
 const { Users } = require("../models/index");
 
 //
@@ -35,6 +35,7 @@ const loginCreate = async (req, res) => {
 
     // Set session dengan username
     req.session.username = username;
+    req.session.idUser = user.id_user;
     // Mengirim respons berhasil
     res.status(200).json({ message: "Login berhasil", statusCode: 200 });
   } catch (error) {
@@ -45,8 +46,10 @@ const loginCreate = async (req, res) => {
 
 // register view render
 const registerView = (req, res) => {
+  const loggedIn = !!req.session.username;
   res.render("auth/register", {
     currentPage: "register",
+    loggedIn: loggedIn,
   });
 };
 
@@ -116,6 +119,83 @@ const adminAuth = async (req, res) => {
     res.status(500).json({ message: "Terjadi kesalahan server" });
   }
 };
+
+const userList = async (req, res) => {
+  try {
+    const users = await Users.findAll({
+      attributes: [
+        "id_user",
+        "fullName",
+        "username",
+        "email",
+        "telepone",
+        "gender",
+      ],
+    });
+
+    return res.json({
+      message: "successfull",
+      statusCode: 200,
+      data: users,
+    });
+  } catch (error) {
+    return res.json({
+      message: "terjadi kesalahan",
+      statusCode: 400,
+    });
+  }
+};
+
+const editUser = async (req, res) => {
+  const id = req.params.id;
+  const { fullName, username, email, password, telepone, gender } = req.body;
+  try {
+    const findId = await Users.findByPk(id);
+    if (!findId) {
+      return res.json({
+        message: "terjadi kesalahan",
+        statusCode: 400,
+      });
+    }
+    findId.fullName = fullName;
+    findId.username = username;
+    findId.email = email;
+    findId.password = !password ? findId.password : password;
+    findId.telepone = telepone;
+    findId.gender = gender;
+    await findId.save();
+
+    return res.json({
+      message: "successfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    return res.json({
+      message: "terjadi kesalahan",
+      statusCode: 400,
+    });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const delUser = await Users.destroy({
+      where: {
+        id_user: id,
+      },
+    });
+    return res.json({
+      message: "success",
+      statusCode: 200,
+    });
+  } catch (error) {
+    return res.json({
+      message: "terjadi kesalahan",
+      statusCode: 400,
+    });
+  }
+};
 module.exports = {
   getUsers,
   createUsers,
@@ -125,4 +205,7 @@ module.exports = {
   logOut,
   adminLoginView,
   adminAuth,
+  userList,
+  deleteUser,
+  editUser,
 };

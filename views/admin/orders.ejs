@@ -5,69 +5,339 @@ include('../partials/adminSidebar') %>
     <h1>Pemesanan</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
         <li class="breadcrumb-item">Tables</li>
         <li class="breadcrumb-item active">General</li>
       </ol>
     </nav>
   </div>
   <!-- End Page Title -->
-
   <section class="section">
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Data Pemesanan</h5>
+            <% if (type === 'detail') { %>
+            <div
+              class="fade show active profile-overview"
+              id="profile-overview"
+            >
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Tanggal Reservasi</div>
+                <div class="col-lg-9 col-md-8" id="tglres">
+                  : <%= data.orderData.tanggal_reservasi.toDateString() %>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-lg-3 col-md-4 label">Status Reservasi</div>
+                <div class="col-lg-9 col-md-8">
+                  : <%= data.orderData.status_reservasi %>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-lg-3 col-md-4 label">Nomor Meja</div>
+                <div class="col-lg-9 col-md-8">
+                  : <%= data.orderData.table.no_table %>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-lg-3 col-md-4 label">Nama Cust</div>
+                <div class="col-lg-9 col-md-8">
+                  : <%= data.orderData.user.username %>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-lg-3 col-md-4 label">Menu</div>
+                <div class="col-lg-9 col-md-8">
+                  <% data.itemsData.forEach(element => { %>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <i class="bi bi-arrow-right"></i><%= element.food.title %>
+                    </div>
+                    <div class="col-lg-6">
+                      <%= element.quantity %> X Rp <%= element.food.price %>
+                    </div>
+                  </div>
+                  <% }) %>
+                  <div class="row mt-2">
+                    <hr />
+                    <div class="col-lg-6">Total</div>
+                    <div class="col-lg-6">
+                      Rp <%= data.orderData.total_bayar %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="row">
+                <div class="col-lg-3 col-md-4 label">Phone</div>
+                <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Email</div>
+                <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
+              </div> -->
+            </div>
+            <% } else if(type === "edit") { %>
+            <form id="formEdit">
+              <div class="row mb-3">
+                <input
+                  type="hidden"
+                  id="idOrder"
+                  value="<%= data.orderData.id_order %>"
+                />
+                <label for="fullName" class="col-md-4 col-lg-3 col-form-label"
+                  >Tanggal Reservasi</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <input disabled name="fullName" type="datetime"
+                  class="form-control" id="fullName" value="<%=
+                  data.orderData.tanggal_reservasi.toLocaleDateString("id-ID")
+                  %>" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="company" class="col-md-4 col-lg-3 col-form-label"
+                  >Nomor Meja</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <input
+                    disabled
+                    name="company"
+                    type="text"
+                    class="form-control"
+                    id="company"
+                    value="<%= data.orderData.table.no_table %>"
+                  />
+                </div>
+              </div>
 
+              <div class="row mb-3">
+                <label for="Job" class="col-md-4 col-lg-3 col-form-label"
+                  >Nama Customer</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <input
+                    disabled
+                    name="job"
+                    type="text"
+                    class="form-control"
+                    id="Job"
+                    value="<%= data.orderData.user.username %>"
+                  />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="Country" class="col-md-4 col-lg-3 col-form-label"
+                  >Total Bayar</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <input
+                    disabled
+                    name="country"
+                    type="text"
+                    class="form-control"
+                    id="Country"
+                    value="Rp <%= data.orderData.total_bayar %>"
+                  />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="Address" class="col-md-4 col-lg-3 col-form-label"
+                  >Status</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <select
+                    class="form-select"
+                    id="floatingSelect"
+                    aria-label="Floating label select example"
+                  >
+                    <% if (data.orderData.status_reservasi === "Pending") { %>
+                    <option value="Pending" selected>Pending</option>
+                    <option value="Proses">Proses</option>
+                    <option value="Selesai">Selesai</option>
+                    <% } else if(data.orderData.status_reservasi === "Proses")
+                    {%>
+                    <option value="Pending">Pending</option>
+                    <option value="Proses" selected>Proses</option>
+                    <option value="Selesai">Selesai</option>
+                    <% } else { %>
+                    <option value="Pending">Pending</option>
+                    <option value="Proses">Proses</option>
+                    <option value="Selesai" selected>Selesai</option>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+            <% } else { %>
             <table id="example" class="table table-striped" style="width: 100%">
               <thead>
                 <tr>
                   <th>Id</th>
-                  <th>Tittle</th>
-                  <th>Summary</th>
-                  <th>Price</th>
-                  <th>Images</th>
-                  <th>Category</th>
+                  <th>Tanggal Reservasi</th>
+                  <th>Status Reservasi</th>
+                  <th>Total Bayar</th>
+                  <th>Nama Pelanggan</th>
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Example Tittle</td>
-                  <td>Example Summary</td>
-                  <td>10</td>
-                  <td>
-                    <img
-                      class="img-fluid rounded"
-                      style="width: 80px"
-                      src="example.jpg"
-                      alt="Example Image"
-                    />
-                  </td>
-                  <td>Example Category</td>
-                  <td>
-                    <button class="btn btn-outline-secondary">
-                      <i class="bi bi-trash-fill"></i>
-                    </button>
-                    <a href="#" class="btn btn-outline-secondary">
-                      <i class="bi bi-pencil-fill"></i>
-                    </a>
-                  </td>
-                </tr>
-                <!-- Tambahkan baris data lainnya sesuai kebutuhan -->
-              </tbody>
+              <tbody></tbody>
             </table>
+            <% } %>
           </div>
         </div>
       </div>
     </div>
   </section>
 </main>
-<!-- End #main -->
-<!-- End #main -->
-<!-- End #main -->
-<!-- End #main -->
-<script></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#example").DataTable({
+      ajax: {
+        url: "/admin/api/orderData",
+        type: "GET",
+      },
+      columns: [
+        {
+          data: null,
+          render: function (data, type, row, meta) {
+            // Mengambil nomor urut baris
+            var rowIndex = meta.row + meta.settings._iDisplayStart + 1;
+            return rowIndex;
+          },
+        },
+        {
+          data: "tanggal_reservasi",
+          render: function (data, type, row) {
+            // Mengubah format data tanggal menjadi tanggal saja
+            var tanggal = new Date(data);
+            var options = { year: "numeric", month: "long", day: "numeric" };
+            return tanggal.toLocaleDateString("id-ID", options);
+          },
+        },
+        { data: "status_reservasi" },
+        {
+          data: "total_bayar",
+          render: function (data, type, row) {
+            // Menambahkan simbol "Rp" pada data
+            var totalBayar = "Rp " + data;
+            return totalBayar;
+          },
+        },
+        { data: "user.username" },
+        {
+          data: "id_order",
+          render: function (data, type, row) {
+            var foodId = row.id; // Mengambil ID food dari data baris
+
+            // Tombol Hapus
+            var deleteButton =
+              '<button class="btn btn-outline-secondary delete-order-btn" data-order-id="' +
+              data +
+              '"><i class="bi bi-trash-fill"></i></button>';
+
+            // Tombol Edit
+            var editButton =
+              '<a class="btn btn-outline-secondary edit-food-btn mx-1" href="/admin/orders?type=edit&id=' +
+              data +
+              '"><i class="bi bi-pencil-fill"></i></a>';
+
+            var detailButton =
+              '<a class="btn btn-outline-secondary edit-food-btn" href="/admin/orders?type=detail&id=' +
+              data +
+              '"><i class="bi bi-eye"></i></a>';
+
+            return deleteButton + editButton + detailButton;
+          },
+        },
+      ],
+    });
+  });
+
+  $("#example").on("click", ".delete-order-btn", function () {
+    var id = $(this).data("order-id");
+    // Mengirim permintaan penghapusan menggunakan fetch atau AJAX
+    Swal.fire({
+      title: "Apakah kamu yakin?",
+      text: "Ingin menghapus data ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch("/admin/api/deleteorder/" + id, {
+          method: "DELETE",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            // Handle respon dari server (berhasil atau gagal)
+            if (data.statusCode === 200) {
+              Swal.fire(
+                "Good job!",
+                "Data berhasil dihapus",
+                "success",
+                confirm
+              );
+            }
+
+            // Lakukan tindakan lain jika diperlukan
+            // Misalnya, refresh tabel atau tampilkan notifikasi
+            $("#example").DataTable().ajax.reload();
+          })
+          .catch((error) => {
+            // Tangani kesalahan jika terjadi
+            if (error.statusCode === 400) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+            console.error(error);
+          });
+      }
+    });
+  });
+
+  $("#formEdit").submit(function (e) {
+    e.preventDefault();
+    var statusRes = $("#floatingSelect").val();
+    var id = $("#idOrder").val();
+
+    fetch(`/admin/api/editorder/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: statusRes,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // Handle respon dari server (berhasil atau gagal)
+        if (data.statusCode === 200) {
+          Swal.fire("Good job!", "Data berhasil diupdate", "success");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+</script>
 <%- include('../partials/adminFooter') %>

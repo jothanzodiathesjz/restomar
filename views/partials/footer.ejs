@@ -64,6 +64,19 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js
 
     <!-- Template Javascript -->
     <script src="/plugin2/js/main.js"></script>
+    <script>
+        function makereservasi(){
+            const loggedIn = "<%= loggedIn %>";
+            if(loggedIn === "false"){
+                Swal.fire({
+                title: "Silahkan",
+                text: "Login terlebih dahulu",
+              });
+            }else{
+                window.location.href = "/reservasi"
+            }
+        }
+    </script>
 </body>
 
 </html>

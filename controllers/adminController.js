@@ -5,6 +5,7 @@ const {
   Table,
   Order,
   OrderItems,
+  Payment,
 } = require("../models/index");
 const multer = require("multer");
 const path = require("path");
@@ -67,6 +68,9 @@ exports.foodView = async (req, res) => {
   try {
     if (idFood) {
       const findFood = await Food.findByPk(idFood);
+      if (!findFood) {
+        res.redirect("/404");
+      }
       res.render("admin/food2", {
         active: "food",
         type: typeCat,
@@ -119,54 +123,122 @@ exports.tableView = (req, res) => {
     type: typeCat,
   });
 };
-exports.ordersView = (req, res) => {
+exports.ordersView = async (req, res) => {
   const type = req.query.type;
+  const id = req.query.id;
   const query = (ass) => {
-    if (ass === "tambah") {
-      return "tambah";
+    if (ass === "detail") {
+      return "detail";
+    } else if (ass === "edit") {
+      return "edit";
     } else {
       return "default";
     }
   };
-  const typeCat = query(type);
-  console.log(typeCat);
-  res.render("admin/orders", {
-    active: "orders",
-    type: typeCat,
-  });
+  try {
+    const typeCat = query(type);
+    if (id) {
+      const orderData = await Order.findOne({
+        where: { id_order: id },
+        include: [{ model: Table }, { model: Users, attributes: ["username"] }],
+      });
+
+      if (!orderData) {
+        res.redirect("/404");
+      }
+      const itemsData = await OrderItems.findAll({
+        where: { order_id: id },
+        include: { model: Food },
+      });
+      res.render("admin/orders", {
+        active: "orders",
+        data: { orderData, itemsData },
+        type: typeCat,
+      });
+    }
+    res.render("admin/orders", {
+      active: "orders",
+      type: typeCat,
+    });
+  } catch (error) {}
 };
 
-exports.paymentView = (req, res) => {
+exports.paymentView = async (req, res) => {
+  const idQuery = req.query.id;
   const type = req.query.type;
   const query = (ass) => {
-    if (ass === "tambah") {
-      return "tambah";
+    if (ass === "edit") {
+      return "edit";
     } else {
       return "default";
     }
   };
   const typeCat = query(type);
   console.log(typeCat);
-  res.render("admin/payment", {
-    active: "payment",
-    type: typeCat,
-  });
+  try {
+    if (idQuery) {
+      const findFood = await Payment.findByPk(idQuery);
+      if (!findFood) {
+        res.redirect("/404");
+      }
+      res.render("admin/payment", {
+        active: "payment",
+        type: typeCat,
+        data: findFood,
+      });
+    } else {
+      res.render("admin/payment", {
+        active: "payment",
+        type: typeCat,
+        data: idQuery,
+      });
+    }
+  } catch (error) {
+    res.json({
+      message: "terjadi kesalahan",
+    });
+  }
 };
-exports.usersView = (req, res) => {
+exports.usersView = async (req, res) => {
   const type = req.query.type;
+  const id = req.query.id;
   const query = (ass) => {
-    if (ass === "tambah") {
-      return "tambah";
+    if (ass === "detail") {
+      return "detail";
+    } else if (ass === "edit") {
+      return "edit";
     } else {
       return "default";
     }
   };
-  const typeCat = query(type);
-  console.log(typeCat);
-  res.render("admin/users", {
-    active: "users",
-    type: typeCat,
-  });
+  try {
+    const typeCat = query(type);
+    if (id) {
+      const userData = await Users.findOne({
+        where: { id_user: id },
+        attributes: [
+          "id_user",
+          "fullName",
+          "username",
+          "email",
+          "telepone",
+          "gender",
+        ],
+      });
+      if (!userData) {
+        res.redirect("/404");
+      }
+      res.render("admin/users", {
+        active: "users",
+        data: userData,
+        type: typeCat,
+      });
+    }
+    res.render("admin/users", {
+      active: "users",
+      type: typeCat,
+    });
+  } catch (error) {}
 };
 
 // CRUD API Controllers
@@ -409,6 +481,7 @@ exports.orderCreate = async (req, res) => {
       data: { dataOrder, dataItem },
       orderId: orderId,
       message: "Data reservation berhasil disimpan",
+      statusCode: 200,
     });
   } catch (error) {
     console.log(error);
@@ -418,7 +491,9 @@ exports.orderCreate = async (req, res) => {
 
 exports.orderData = async (req, res) => {
   try {
-    const orderData = await Order.findAll();
+    const orderData = await Order.findAll({
+      include: { model: Users, attributes: ["username"] },
+    });
     res.send({
       data: orderData,
       message: "successful get data",
@@ -426,6 +501,172 @@ exports.orderData = async (req, res) => {
   } catch (error) {
     res.send({
       message: "terjadi error",
+    });
+  }
+};
+
+exports.orderTes = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const orderData = await Order.findOne({
+      where: { id_order: id },
+      include: [{ model: Table }, { model: Users, attributes: ["username"] }],
+    });
+    const itemsData = await OrderItems.findAll({
+      where: { order_id: id },
+      include: { model: Food },
+    });
+
+    res.json({
+      data: { orderData, itemsData },
+      message: "succesfull",
+    });
+  } catch (error) {
+    res.json({
+      message: "terjadi kesalahan",
+    });
+  }
+};
+
+exports.orderDelete = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const delOrder = await Order.destroy({
+      where: {
+        id_order: id,
+      },
+    });
+    if (!delOrder) {
+      res.send({
+        message: "terjadi error",
+        statusCode: 400,
+      });
+    }
+    res.send({
+      message: "succesfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+      statusCode: 400,
+    });
+  }
+};
+
+exports.orderUpdate = async (req, res) => {
+  const id = req.params.id;
+  const statusRes = req.body.status;
+  try {
+    const updateOrder = await Order.findByPk(id);
+    if (!updateOrder) {
+      return res.send({
+        message: "terjadi error",
+        statusCode: 400,
+      });
+    }
+    updateOrder.status_reservasi = statusRes;
+    await updateOrder.save();
+    res.send({
+      message: "succesfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+      statusCode: 400,
+    });
+  }
+};
+
+// pembayaran
+exports.paymentCreate = async (req, res) => {
+  const { orderId } = req.body;
+  const filename = req.file.filename;
+  const destination = "/food_images/" + filename;
+
+  try {
+    const findId = await Payment.findOne({ where: { order_id: orderId } });
+    if (!findId) {
+      const payment = Payment.create({
+        status: "Proses",
+        bukti_pembayaran: destination,
+        order_id: orderId,
+      });
+      res.json({
+        message: "successfull",
+        statusCode: 200,
+      });
+    }
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+      statusCode: 400,
+    });
+  }
+};
+
+exports.paymentData = async (req, res) => {
+  try {
+    const dataPayment = await Payment.findAll();
+    res.send({
+      data: dataPayment,
+      message: "succesfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+      statusCode: 400,
+    });
+  }
+};
+
+exports.ediPayment = async (req, res) => {
+  const id = req.params.id;
+  const { status } = req.body;
+  try {
+    const paym = await Payment.findByPk(id);
+    console.log(status);
+    if (paym) {
+      // Food dengan ID yang cocok ditemukan, lakukan pembaruan data
+      paym.status = status;
+      await paym.save();
+
+      // Kirim respon berhasil ke client
+      return res
+        .status(200)
+        .json({ message: "Pay updated successfully", statusCode: 200 });
+    }
+  } catch (error) {
+    res.send({
+      message: "terjadi kesalahan",
+    });
+  }
+};
+
+exports.deletePayment = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const delPay = await Payment.destroy({
+      where: {
+        id_payment: id,
+      },
+    });
+    if (!delOrder) {
+      res.send({
+        message: "terjadi error",
+        statusCode: 400,
+      });
+    }
+    res.send({
+      message: "succesfull",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.send({
+      message: "terjadi error",
+      statusCode: 400,
     });
   }
 };

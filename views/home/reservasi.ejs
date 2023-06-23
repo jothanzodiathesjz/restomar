@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>RestoMar - Reservasi</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="keywords" />
+    <meta content="" name="description" />
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon" />
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icon Font Stylesheet -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- sweet allert -->
+    <link
+      href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
+"
+      rel="stylesheet"
+    />
+
+    <!-- Libraries Stylesheet -->
+    <link href="/plugin2/lib/animate/animate.min.css" rel="stylesheet" />
+    <link
+      href="/plugin2/lib/owlcarousel/assets/owl.carousel.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="/plugin2/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/plugin2/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Template Stylesheet -->
+    <link href="/plugin2/css/style.css" rel="stylesheet" />
+    <style>
+      .ini {
+        cursor: pointer;
+      }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container bg-white">
+      <!-- Spinner Start -->
+      <div
+        id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
+      >
+        <div
+          class="spinner-border text-primary"
+          style="width: 3rem; height: 3rem"
+          role="status"
+        >
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <!-- Spinner End -->
+
+      <!-- Reservation Start -->
+      <div>
+        <div class="row">
+          <div
+            class="col-12 bg-dark d-flex justify-content-center align-items-center"
+          >
+            <div class="p-5 wow">
+              <h5
+                class="section-title ff-secondary text-start text-primary fw-normal"
+              >
+                Reservation
+              </h5>
+              <h1 class="text-white mb-4">Book A Table Online</h1>
+              <form>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="form-floating date" id="date3">
+                      <input
+                        type="datetime-local"
+                        class="form-control datetimepicker-input"
+                        id="datetime"
+                      />
+                      <label for="datetime">Date & Time</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <select class="form-select" id="select1"></select>
+                      <label for="select1">No Of Table</label>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="py-5">
+        <div class="container">
+          <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h5
+              class="section-title ff-secondary text-center text-primary fw-normal"
+            >
+              Food Menu
+            </h5>
+            <h1 class="mb-5">Most Popular Items</h1>
+          </div>
+          <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.1s">
+            <ul
+              class="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5"
+            >
+              <li class="nav-item">
+                <a
+                  class="d-flex align-items-center text-start mx-3 ms-0 pb-3 active"
+                  data-bs-toggle="pill"
+                  href="#tab-1"
+                >
+                  <i class="fa fa-coffee fa-2x text-primary"></i>
+                  <div class="ps-3">
+                    <small class="text-body">Popular</small>
+                    <h6 class="mt-n1 mb-0">Breakfast</h6>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="d-flex align-items-center text-start mx-3 pb-3"
+                  data-bs-toggle="pill"
+                  href="#tab-2"
+                >
+                  <i class="fa fa-hamburger fa-2x text-primary"></i>
+                  <div class="ps-3">
+                    <small class="text-body">Special</small>
+                    <h6 class="mt-n1 mb-0">Launch</h6>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="d-flex align-items-center text-start mx-3 me-0 pb-3"
+                  data-bs-toggle="pill"
+                  href="#tab-3"
+                >
+                  <i class="fa fa-utensils fa-2x text-primary"></i>
+                  <div class="ps-3">
+                    <small class="text-body">Lovely</small>
+                    <h6 class="mt-n1 mb-0">Dinner</h6>
+                  </div>
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content" id="contentTab">
+              <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4">
+                  <% food.filter(element=>element.id_category ===
+                  category[0].id).forEach(element => { %>
+                  <div
+                    class="col-lg-6 ini"
+                    data-id="<%= element.id_food %>"
+                    data-img="<%= element.images %>"
+                    data-title="<%= element.title %>"
+                    data-price="<%= element.price %>"
+                  >
+                    <div class="d-flex align-items-center">
+                      <img
+                        class="flex-shrink-0 img-fluid rounded"
+                        src="<%= element.images %>"
+                        alt=""
+                        style="width: 80px"
+                      />
+                      <div class="w-100 d-flex flex-column text-start ps-4">
+                        <h5
+                          class="d-flex justify-content-between border-bottom pb-2"
+                        >
+                          <span class="title"><%= element.title %></span>
+                          <span class="text-primary price"
+                            ><%= element.price %></span
+                          >
+                        </h5>
+                        <small class="fst-italic"
+                          >Ipsum ipsum clita erat amet dolor justo diam</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <% }) %>
+                </div>
+              </div>
+              <div id="tab-2" class="tab-pane fade show p-0">
+                <div class="row g-4">
+                  <% food.filter(element=>element.id_category ===
+                  category[1].id).forEach(element => { %>
+                  <div
+                    class="col-lg-6 ini"
+                    data-id="<%= element.id_food %>"
+                    data-img="<%= element.images %>"
+                    data-title="<%= element.title %>"
+                    data-price="<%= element.price %>"
+                  >
+                    <div class="d-flex align-items-center">
+                      <img
+                        class="flex-shrink-0 img-fluid rounded"
+                        src="<%= element.images %>"
+                        alt=""
+                        style="width: 80px"
+                      />
+                      <div class="w-100 d-flex flex-column text-start ps-4">
+                        <h5
+                          class="d-flex justify-content-between border-bottom pb-2"
+                        >
+                          <span class="title"><%= element.title %></span>
+                          <span class="text-primary price"
+                            ><%= element.price %></span
+                          >
+                        </h5>
+                        <small class="fst-italic"
+                          >Ipsum ipsum clita erat amet dolor justo diam</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <% }) %>
+                </div>
+              </div>
+              <div id="tab-3" class="tab-pane fade show p-0">
+                <div class="row g-4">
+                  <% food.filter(element=>element.id_category ===
+                  category[2].id).forEach(element => { %>
+                  <div
+                    class="col-lg-6 ini"
+                    data-id="<%= element.id_food %>"
+                    data-img="<%= element.images %>"
+                    data-title="<%= element.title %>"
+                    data-price="<%= element.price %>"
+                  >
+                    <div class="d-flex align-items-center">
+                      <img
+                        class="flex-shrink-0 img-fluid rounded"
+                        src="<%= element.images %>"
+                        alt=""
+                        style="width: 80px"
+                      />
+                      <div class="w-100 d-flex flex-column text-start ps-4">
+                        <h5
+                          class="d-flex justify-content-between border-bottom pb-2"
+                        >
+                          <span class="title"><%= element.title %></span>
+                          <span class="text-primary price"
+                            ><%= element.price %></span
+                          >
+                        </h5>
+                        <small class="fst-italic"
+                          >Ipsum ipsum clita erat amet dolor justo diam</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="h-100 gradient-custom">
+        <div class="container py-5">
+          <div class="row d-flex justify-content-center my-4">
+            <div class="col-md-8">
+              <div class="card mb-4">
+                <div class="card-header py-3">
+                  <h5 class="mb-0">Cart</h5>
+                </div>
+                <div class="card-body cartlist">
+                  <!-- Single item -->
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card mb-4">
+                <div class="card-header py-3">
+                  <h5 class="mb-0">Summary</h5>
+                </div>
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                    <li
+                      class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0"
+                    >
+                      Total bayar
+                      <span id="totprice"></span>
+                    </li>
+                    <li
+                      class="list-group-item d-flex justify-content-between align-items-center px-0"
+                    >
+                      qty
+                      <span id="totqty"></span>
+                    </li>
+                  </ul>
+                  <hr />
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-lg btn-block"
+                    onclick="check()"
+                  >
+                    Make Reservation
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Footer End -->
+
+      <!-- Back to Top -->
+      <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
+        ><i class="bi bi-arrow-up"></i
+      ></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js
+"></script>
+    <script src="/plugin2/lib/wow/wow.min.js"></script>
+    <script src="/plugin2/lib/easing/easing.min.js"></script>
+    <script src="/plugin2/lib/waypoints/waypoints.min.js"></script>
+    <script src="/plugin2/lib/counterup/counterup.min.js"></script>
+    <script src="/plugin2/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/plugin2/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="/plugin2/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="/plugin2/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Template Javascript -->
+    <script src="/plugin2/js/main.js"></script>
+    <script>
+      const input = document.getElementById("datetime");
+      const now = new Date();
+      const formattedNow = now.toISOString().slice(0, 16);
+      input.min = formattedNow;
+
+      $(document).ready(function () {
+        // Mengambil data dari API
+        $.ajax({
+          url: "/admin/api/tablelist",
+          method: "GET",
+          success: function (data) {
+            // Loop melalui data dan tambahkan opsi ke dalam elemen select
+            data.data.forEach(function (item) {
+              $("#select1").append(
+                $("<option>", {
+                  value: item.id_table,
+                  text: item.no_table,
+                })
+              );
+            });
+          },
+          error: function () {
+            console.log("Gagal mengambil data dari API.");
+          },
+        });
+      });
+
+      var selectedItems = [];
+      var qty;
+      $(document).ready(function () {
+        // Variabel untuk menyimpan item yang dipilih
+        // Event listener untuk memilih item
+        $("#contentTab .ini").on("click", function () {
+          const itemId = $(this).data("id");
+          const imageUrl = $(this).data("img");
+          const title = $(this).data("title");
+          const price = $(this).data("price");
+          //   // Tambahkan item ke keranjang belanja
+          console.log({ itemId, imageUrl, title, price });
+
+          addItemToCart(itemId, imageUrl, title, price);
+        });
+        // Event listener untuk menghapus item dari keranjang belanja
+        $(".cartlist").on("click", ".btn-remove", function () {
+          const cartItem = $(this).closest(".cart-item");
+          const itemId = cartItem.data("iditem");
+
+          // Hapus item dari selectedItems
+          selectedItems.splice(
+            selectedItems.findIndex((item) => item.id === itemId),
+            1
+          );
+          cartItem.remove();
+          $(this).closest(".garis").remove();
+          const totalValue = calculateTotal();
+          console.log("Total Nilai:", totalValue);
+        });
+
+        function addItemToCart(itemId, imageUrl, title, price) {
+          // Periksa apakah item sudah ada di keranjang
+          const existingItem = selectedItems.find((item) => item.id === itemId);
+          if (existingItem) {
+            console.log("Item sudah ada di keranjang.");
+            return;
+          }
+          // Tambahkan item ke keranjang
+          selectedItems.push({ id: itemId, title: title });
+          // Buat elemen baru untuk ditambahkan ke dalam row
+          const newItem = `
+      <div class="row cart-item" data-iditem="${itemId}">
+        <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+          <div class="bg-image hover-overlay hover-zoom ripple rounded">
+            <img src="${imageUrl}" class="w-100" alt="">
+            <a href="#!">
+              <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+          <p><strong>${title}</strong></p>
+          <button type="button" class="btn btn-primary btn-sm me-1 mb-2 btn-remove" data-mdb-toggle="tooltip" title="Remove item">
+            <i class="fas fa-trash"></i>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip" title="Move to the wish list">
+            <i class="fas fa-heart"></i>
+          </button>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+          <div class="d-flex mb-4" style="max-width: 300px">
+            <button class="btn btn-primary px-3 me-2" onclick="decreaseQuantity(this)">
+              <i class="fas fa-minus"></i>
+            </button>
+            <div class="form-outline">
+              <input id="form1" min="0" name="quantity" value="1" type="number" class="form-control inputqty" onchange="updateQuantity(this)">
+              <label class="form-label" for="form1">Quantity</label>
+            </div>
+            <button class="btn btn-primary px-3 ms-2" onclick="increaseQuantity(this)">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+
+          <p class="text-start text-md-center"><strong class="item-price">${price}</strong></p>
+        </div>
+        <hr class="my-4 garis" />
+      </div>
+    `;
+
+          // Tambahkan elemen baru ke dalam row
+          $(".cartlist").append(newItem);
+          const totalValue = calculateTotal();
+          console.log("Total Nilai:", totalValue);
+          const qtynum = $(".inputqty").val();
+          qty += parseInt(qtynum);
+          console.log("Total Quantity:", qty);
+        }
+      });
+
+      function decreaseQuantity(button) {
+        const quantityInput = button.parentNode.querySelector(
+          'input[name="quantity"]'
+        );
+        let quantity = parseInt(quantityInput.value);
+        if (!isNaN(quantity) && quantity > 0) {
+          quantity--;
+          quantityInput.value = quantity;
+          updateItemQuantity(quantity);
+        }
+      }
+
+      function increaseQuantity(button) {
+        const quantityInput = button.parentNode.querySelector(
+          'input[name="quantity"]'
+        );
+        let quantity = parseInt(quantityInput.value);
+        if (!isNaN(quantity)) {
+          quantity++;
+          quantityInput.value = quantity;
+          updateItemQuantity(quantity);
+        }
+      }
+
+      function updateQuantity(input) {
+        const quantity = parseInt(input.value);
+        if (!isNaN(quantity) && quantity >= 0) {
+          updateItemQuantity(quantity);
+        }
+      }
+
+      function updateItemQuantity(quantity) {
+        // Lakukan tindakan yang diperlukan dengan kuantitas yang diperbarui
+        console.log("Kuantitas diperbarui:", quantity);
+        const quantityInput = document.querySelector(".inputqty");
+        const quantityValue = quantityInput.value;
+        const totalValue = calculateTotal();
+        console.log("Total Nilai:", totalValue);
+      }
+
+      function calculateTotal() {
+        let total = 0;
+        let totalQuantity = 0;
+        const totprice = $("#totprice");
+        const totqty = $("#totqty");
+
+        $(".cart-item").each(function () {
+          const price = $(this).find(".item-price").text();
+          const quantity = parseInt(
+            $(this).find('input[name="quantity"]').val()
+          );
+
+          if (!isNaN(quantity)) {
+            const itemTotal = parseFloat(price) * quantity;
+            total += itemTotal;
+            totalQuantity += quantity;
+          }
+        });
+        totprice.text(total);
+        totqty.text(totalQuantity);
+        console.log("Total Quantity:", totalQuantity);
+
+        return total.toFixed(2); // Mengembalikan total dengan dua angka desimal
+      }
+
+      const totalValue = calculateTotal();
+      console.log("Total Nilai:", totalValue);
+
+      function validateQuantity(input) {
+        if (input.value <= 0) {
+          input.value = 1; // Mengembalikan nilai input ke 1 jika nilainya kurang dari atau sama dengan 0
+        }
+      }
+      function check() {
+        const cartItems = [];
+
+        $(".cart-item").each(function () {
+          const itemId = $(this).data("iditem");
+          const title = $(this).find("p strong").text();
+          const price = $(this).find(".item-price").text();
+          const quantity = parseInt($(this).find(".inputqty").val());
+
+          const cartItem = {
+            food_id: itemId,
+            quantity: quantity,
+          };
+
+          cartItems.push(cartItem);
+        });
+
+        const date = $("#datetime").val();
+        const table = $("#select1").val();
+        console.log({ cartItems, date, table });
+
+        const data = {
+          dataOrder: {
+            table_id: table,
+            status_reservasi: "pending",
+            tanggal_reservasi: date,
+            id_user: "<%= idUser %>",
+          },
+          dataItem: cartItems,
+        };
+        if (!date || !table || !cartItems) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Anda belum menyelesaikan resevasi",
+          });
+        } else {
+          fetch("/admin/api/createOrder", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.statusCode === 200) {
+                Swal.fire({
+                  title: "Wait",
+                  html: "sedang melakukan proses",
+                  timer: 2000,
+                  timerProgressBar: true,
+                  didOpen: () => {
+                    Swal.showLoading();
+                    timerInterval = setInterval(() => {}, 100);
+                  },
+                  willClose: () => {
+                    clearInterval(timerInterval);
+                  },
+                }).then((result) => {
+                  /* Read more about handling dismissals below */
+                  if (result.dismiss === Swal.DismissReason.timer) {
+                    Swal.fire(
+                      "Berhasil",
+                      "silahkan lakukan pembayaran",
+                      "success"
+                    );
+                    setTimeout(function () {
+                      window.location.href = "/payment/" + data.orderId;
+                    }, 1000);
+                  }
+                });
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      }
+    </script>
+  </body>
+</html>

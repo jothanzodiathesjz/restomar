@@ -122,7 +122,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
                   ><%= username %></a
                 >
                 <div class="dropdown-menu m-0">
-                  <a href="booking.html" class="dropdown-item">Booking</a>
+                  <a href="/profile/<%= id %>" class="dropdown-item">Profile</a>
                   <a href="team.html" class="dropdown-item">Our Team</a>
                   <a href="/signout" class="dropdown-item">Log out</a>
                 </div>
@@ -131,7 +131,13 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
               <a href="/signin" class="nav-item nav-link">Login</a>
               <% } %>
             </div>
-            <a href="" class="btn btn-primary py-2 px-4">Book A Table</a>
+            <button
+              type="button"
+              onclick="makereservasi()"
+              class="btn btn-primary py-2 px-4"
+            >
+              Book A Table
+            </button>
           </div>
         </nav>
       </div>

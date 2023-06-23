@@ -1,0 +1,33 @@
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-heading">Profile</li>
+  
+      <li class="nav-item">
+        <a class="nav-link <%= (active === "profile") ? "": "collapsed" %>" href="/profile/<%= id %>">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <%= (active === "riwayat") ? "": "collapsed" %>" href="/profile/<%= id %>/reservasi">
+          <i class="bi bi-list-ol"></i>
+          <span>Riwayat reservasi</span>
+        </a>
+      </li>
+      <!-- End F.A.Q Page Nav -->
+  
+      
+      <!-- End Error 404 Page Nav -->
+  
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="/">
+          <i class="bi bi-file-earmark"></i>
+          <span>Home</span>
+        </a>
+      </li>
+      <!-- End Blank Page Nav -->
+    </ul>
+  </aside>
+  <!-- End Sidebar-->
+  

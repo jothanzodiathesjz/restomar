@@ -17,7 +17,7 @@ const Users = db.define(
     username: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    telepone: DataTypes.INTEGER,
+    telepone: DataTypes.STRING,
     gender: DataTypes.STRING,
     role: DataTypes.STRING,
   },

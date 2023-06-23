@@ -11,8 +11,8 @@ app.use(
     //Usuage
     secret: "marni",
     name: "uniqueSessionID",
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // Kedaluwarsa dalam milidetik (misalnya, 24 jam)
       // expires: new Date(Date.now() + 24 * 60 * 60 * 1000) // Atau menggunakan opsi expires
@@ -32,8 +32,8 @@ const {
 } = require("./models/index.js");
 const Router = require("./routes/index.js");
 
-app.set("view engine", "ejs");
 app.use(morgan("dev"));
+app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 // Body Parser

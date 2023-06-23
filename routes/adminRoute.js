@@ -20,6 +20,14 @@ const {
   createTable,
   deleteTable,
   orderCreate,
+  orderData,
+  orderTes,
+  orderDelete,
+  orderUpdate,
+  paymentCreate,
+  paymentData,
+  ediPayment,
+  deletePayment,
 } = require("../controllers/adminController");
 
 route.get("/admin", adminAuth, adminView);
@@ -50,4 +58,14 @@ route.delete("/admin/api/deletetable/:id", deleteTable);
 
 // orderRoute
 route.post("/admin/api/createOrder", orderCreate);
+route.get("/admin/api/orderData", orderData);
+route.get("/admin/api/order/:id", orderTes);
+route.delete("/admin/api/deleteorder/:id", orderDelete);
+route.put("/admin/api/editorder/:id", orderUpdate);
+
+// payment
+route.post("/admin/api/createPayment", upload.single("images"), paymentCreate);
+route.get("/admin/api/datapayment", paymentData);
+route.put("/admin/api/editpayment/:id", ediPayment);
+route.delete("/admin/api/deletepayment/:id", deletePayment);
 module.exports = route;

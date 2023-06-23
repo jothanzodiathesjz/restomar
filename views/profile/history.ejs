@@ -1,0 +1,171 @@
+<%- include('../partials/profileHeader') %> <%-
+include('../partials/profileSidebar') %>
+
+<script>
+  function generatePDF() {
+    // Data resi pembayaran
+    var resiData = {
+      customerName: "John Doe",
+      orderNumber: "12345",
+      date: new Date().toLocaleDateString(),
+      totalAmount: "$100",
+    };
+
+    // Definisikan konten dokumen PDF
+    var docDefinition = {
+      content: [
+        { text: "Resi Pembayaran", style: "header" },
+        { text: "====================", style: "subheader" },
+        { text: `Nomor Pesanan: ${resiData.orderNumber}` },
+        { text: `Tanggal: ${resiData.date}` },
+        { text: `Pelanggan: ${resiData.customerName}` },
+        { text: `Total Pembayaran: ${resiData.totalAmount}` },
+        { text: "====================", style: "subheader" },
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          alignment: "center",
+          margin: [0, 0, 0, 10],
+        },
+        subheader: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 10, 0, 5],
+        },
+      },
+    };
+
+    // Buat dokumen PDF menggunakan pdfmake
+    var pdfDoc = pdfmake.createPdf(docDefinition);
+
+    // Cetak dokumen PDF
+    pdfDoc.open();
+  }
+</script>
+<main id="main" class="main">
+  <!-- title page -->
+  <div class="pagetitle">
+    <h1>History</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+  <section class="section">
+    <% if (type==="detail") { %>
+    <div class="row align-items-top">
+      <div class="card mb-3 py-4">
+        <div class="row">
+          <div class="col-lg-3 col-md-4 label">Tanggal Reservasi</div>
+          <div class="col-lg-9 col-md-8" id="tglres">
+            : <%= data.orderData.tanggal_reservasi.toDateString() %>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-lg-3 col-md-4 label">Status Reservasi</div>
+          <div class="col-lg-9 col-md-8">
+            : <%= data.orderData.status_reservasi %>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-lg-3 col-md-4 label">Nomor Meja</div>
+          <div class="col-lg-9 col-md-8">
+            : <%= data.orderData.table.no_table %>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-lg-3 col-md-4 label">Nama Cust</div>
+          <div class="col-lg-9 col-md-8">
+            : <%= data.orderData.user.username %>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-lg-3 col-md-4 label">Menu</div>
+          <div class="col-lg-9 col-md-8">
+            <% data.itemsData.forEach(element => { %>
+            <div class="row">
+              <div class="col-lg-6">
+                <i class="bi bi-arrow-right"></i><%= element.food.title %>
+              </div>
+              <div class="col-lg-6">
+                <%= element.quantity %> X Rp <%= element.food.price %>
+              </div>
+            </div>
+            <% }) %>
+            <div class="row mt-2">
+              <hr />
+              <div class="col-lg-6">Total</div>
+              <div class="col-lg-6">Rp <%= data.orderData.total_bayar %></div>
+            </div>
+          </div>
+        </div>
+
+        <% if (!idPayment) { %>
+        <a
+          href="/payment/<%= data.orderData.id_order %>"
+          class="btn btn-danger mt-5"
+          >Bayar Sekarang</a
+        >
+        <% } else if(idPayment.status === "Proses"){ %>
+        <div
+          class="alert border-primary alert-dismissible fade show mt-5"
+          role="alert"
+        >
+          Dalam Proses pembayaran
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        <% }else{ %>
+
+        <a
+          href="/generateresi?id=<%= data.orderData.id_order %>"
+          class="btn btn-danger mt-5"
+        >
+          Cetak Resi
+        </a>
+        <% } %>
+      </div>
+    </div>
+
+    <% } else { %> <% data.forEach(element => { %>
+    <div class="row align-items-top justify-content-center">
+      <div class="col-md-10">
+        <div class="card mb-3 py-4">
+          <table class="table-borderless p-5 text-center">
+            <tr class="">
+              <td class="text-center">
+                <%= element.tanggal_reservasi.toDateString("id-ID") %>
+              </td>
+              <td class="text-center">Rp. <%= element.total_bayar %></td>
+              <td class="text-center">
+                <a
+                  class="btn btn-outline-secondary edit-food-btn"
+                  href="/profile/<%= id %>/reservasi?type=detail&id=<%= element.id_order %>"
+                  ><i class="bi bi-eye"></i
+                ></a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <% }) %> <%}%>
+  </section>
+</main>
+
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+<script>
+  function printPage() {
+    window.print();
+  }
+</script>
+<%- include('../partials/adminFooter') %>

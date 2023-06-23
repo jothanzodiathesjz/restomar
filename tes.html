@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cetak Resi Pembayaran</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+  </head>
+  <body>
+    <button onclick="generatePDF()">Cetak Resi</button>
+
+    <script>
+      function generatePDF() {
+        // Data resi pembayaran
+        var resiData = {
+          customerName: "John Doe",
+          orderNumber: "12345",
+          date: new Date().toLocaleDateString(),
+          totalAmount: "$100",
+        };
+
+        // Definisikan konten dokumen PDF
+        var docDefinition = {
+          content: [
+            { text: "Resi Pembayaran", style: "header" },
+            { text: "====================", style: "subheader" },
+            { text: `Nomor Pesanan: ${resiData.orderNumber}` },
+            { text: `Tanggal: ${resiData.date}` },
+            { text: `Pelanggan: ${resiData.customerName}` },
+            { text: `Total Pembayaran: ${resiData.totalAmount}` },
+            { text: "====================", style: "subheader" },
+          ],
+          styles: {
+            header: {
+              fontSize: 18,
+              bold: true,
+              alignment: "center",
+              margin: [0, 0, 0, 10],
+            },
+            subheader: {
+              fontSize: 14,
+              bold: true,
+              margin: [0, 10, 0, 5],
+            },
+          },
+        };
+
+        // Buat dokumen PDF menggunakan pdfmake
+        var pdfDoc = pdfmake.createPdf(docDefinition);
+
+        // Cetak dokumen PDF
+        pdfDoc.open();
+      }
+    </script>
+  </body>
+</html>

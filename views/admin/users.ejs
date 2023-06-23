@@ -18,74 +18,114 @@ include('../partials/adminSidebar') %>
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Datatables</h5>
-            <p>
-              Add lightweight datatables to your project with using the
-              <a
-                href="https://github.com/fiduswriter/Simple-DataTables"
-                target="_blank"
-                >Simple DataTables</a
-              >
-              library. Just add <code>.datatable</code> class name to any table
-              you wish to conver to a datatable
-            </p>
+            <h5 class="card-title">Data Users</h5>
+            <% if (type === 'edit') { %>
+            <form id="formEdit">
+              <div class="row mb-3">
+                <input type="hidden" id="idOrder" value="<%= data.id_user %>" />
+                <label for="fullName" class="col-md-4 col-lg-3 col-form-label"
+                  >Nama Lengkap</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <input
+                    name="fullName"
+                    type="datetime"
+                    class="form-control"
+                    id="fullName"
+                    value="<%=
+                    data.fullName
+                    %>"
+                  />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="company" class="col-md-4 col-lg-3 col-form-label"
+                  >Username</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <input
+                    name="company"
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    value="<%= data.username %>"
+                  />
+                </div>
+              </div>
 
+              <div class="row mb-3">
+                <label for="Job" class="col-md-4 col-lg-3 col-form-label"
+                  >Email</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <input
+                    name="job"
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    value="<%= data.email %>"
+                  />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="Country" class="col-md-4 col-lg-3 col-form-label"
+                  >Telepone</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <input
+                    name="country"
+                    type="text"
+                    class="form-control"
+                    id="telepone"
+                    value="<%= data.telepone %>"
+                  />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="Address" class="col-md-4 col-lg-3 col-form-label"
+                  >Status</label
+                >
+                <div class="col-md-8 col-lg-9">
+                  <select
+                    class="form-select"
+                    id="floatingSelect"
+                    aria-label="Floating label select example"
+                  >
+                    <% if (data.gender === "L") { %>
+                    <option value="L" selected>Laki - laki</option>
+                    <option value="P">Perempuan</option>
+                    <% } else { %>
+                    <option value="L">Laki - laki</option>
+                    <option value="P" selected>Perempuan</option>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+            <% } else { %>
             <!-- Table with stripped rows -->
-            <table class="table datatable">
+            <table id="example" class="table table-striped" style="width: 100%">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Position</th>
-                  <th scope="col">Age</th>
-                  <th scope="col">Start Date</th>
-                  <th scope="col">Action</th>
+                  <th>No</th>
+                  <th>Nama Lengkap</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Telepone</th>
+                  <th>Gender</th>
+                  <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Brandon Jacob</td>
-                  <td>Designer</td>
-                  <td>28</td>
-                  <td>2016-05-25</td>
-                  <td>
-                    <button class="btn btn-outline-secondary">
-                      <i class="bi bi-trash-fill"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Bridie Kessler</td>
-                  <td>Developer</td>
-                  <td>35</td>
-                  <td>2014-12-05</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Ashleigh Langosh</td>
-                  <td>Finance</td>
-                  <td>45</td>
-                  <td>2011-08-12</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Angus Grady</td>
-                  <td>HR</td>
-                  <td>34</td>
-                  <td>2012-06-11</td>
-                </tr>
-                <tr>
-                  <th scope="row">5</th>
-                  <td>Raheem Lehner</td>
-                  <td>Dynamic Division Officer</td>
-                  <td>47</td>
-                  <td>2011-04-19</td>
-                </tr>
-              </tbody>
+              <tbody></tbody>
             </table>
             <!-- End Table with stripped rows -->
+            <% } %>
           </div>
         </div>
       </div>
@@ -94,5 +134,145 @@ include('../partials/adminSidebar') %>
 </main>
 <!-- End #main -->
 <!-- End #main -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#example").DataTable({
+      ajax: {
+        url: "/admin/api/userList",
+        type: "GET",
+      },
+      columns: [
+        {
+          data: null,
+          render: function (data, type, row, meta) {
+            // Mengambil nomor urut baris
+            var rowIndex = meta.row + meta.settings._iDisplayStart + 1;
+            return rowIndex;
+          },
+        },
+        {
+          data: "fullName",
+        },
+        { data: "username" },
+        {
+          data: "email",
+        },
+        { data: "telepone" },
+        { data: "gender" },
+        {
+          data: "id_user",
+          render: function (data, type, row) {
+            var foodId = row.id; // Mengambil ID food dari data baris
+
+            // Tombol Hapus
+            var deleteButton =
+              '<button class="btn btn-outline-secondary delete-user-btn" data-user-id="' +
+              data +
+              '"><i class="bi bi-trash-fill"></i></button>';
+
+            // Tombol Edit
+            var editButton =
+              '<a class="btn btn-outline-secondary edit-food-btn mx-1" href="/admin/users?type=edit&id=' +
+              data +
+              '"><i class="bi bi-pencil-fill"></i></a>';
+
+            var detailButton =
+              '<a class="btn btn-outline-secondary edit-food-btn" href="/admin/orders?type=detail&id=' +
+              data +
+              '"><i class="bi bi-eye"></i></a>';
+
+            return deleteButton + editButton;
+          },
+        },
+      ],
+    });
+  });
+
+  $("#example").on("click", ".delete-user-btn", function () {
+    var id = $(this).data("user-id");
+    // Mengirim permintaan penghapusan menggunakan fetch atau AJAX
+    Swal.fire({
+      title: "Apakah kamu yakin?",
+      text: "Ingin menghapus data ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch("/admin/api/deleteuser/" + id, {
+          method: "DELETE",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            // Handle respon dari server (berhasil atau gagal)
+            if (data.statusCode === 200) {
+              Swal.fire(
+                "Good job!",
+                "Data berhasil dihapus",
+                "success",
+                confirm
+              );
+            }
+
+            // Lakukan tindakan lain jika diperlukan
+            // Misalnya, refresh tabel atau tampilkan notifikasi
+            $("#example").DataTable().ajax.reload();
+          })
+          .catch((error) => {
+            // Tangani kesalahan jika terjadi
+            if (error.statusCode === 400) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+            console.error(error);
+          });
+      }
+    });
+  });
+
+  $("#formEdit").submit(function (e) {
+    e.preventDefault();
+    var gender = $("#floatingSelect").val();
+    var fullName = $("#fullName").val();
+    var username = $("#username").val();
+    var email = $("#email").val();
+    var telepone = $("#telepone").val();
+    var id = $("#idOrder").val();
+
+    fetch(`/admin/api/updateuser/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fullName: fullName,
+        username: username,
+        email: email,
+        telepone: telepone,
+        gender: gender,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // Handle respon dari server (berhasil atau gagal)
+        if (data.statusCode === 200) {
+          Swal.fire("Good job!", "Data berhasil diupdate", "success");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+</script>
 
 <%- include('../partials/adminFooter') %>

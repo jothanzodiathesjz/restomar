@@ -2,7 +2,7 @@
 include('../partials/adminSidebar') %>
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Pembayaran</h1>
+    <h1>Data Tables</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -17,75 +17,113 @@ include('../partials/adminSidebar') %>
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
+          <img src="" alt="" />
           <div class="card-body">
-            <h5 class="card-title">Datatables</h5>
-            <p>
-              Add lightweight datatables to your project with using the
-              <a
-                href="https://github.com/fiduswriter/Simple-DataTables"
-                target="_blank"
-                >Simple DataTables</a
-              >
-              library. Just add <code>.datatable</code> class name to any table
-              you wish to conver to a datatable
-            </p>
-
+            <h5 class="card-title">Payment</h5>
             <!-- Table with stripped rows -->
-            <table class="table datatable">
+            <% if (type === 'tambah') { %>
+                      <!-- General Form Elements -->
+                      <form id="formFood" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                          <label for="inputText" class="col-sm-2 col-form-label">Title</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputTitle">
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label for="inputText" class="col-sm-2 col-form-label">Summary</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputSummary">
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label for="inputNumber" class="col-sm-2 col-form-label">Price</label>
+                          <div class="col-sm-10">
+                            <input type="number" class="form-control" id="inputPrice">
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label for="inputNumber" class="col-sm-2 col-form-label">Images</label>
+                          <div class="col-sm-10">
+                            <input class="form-control" type="file" id="formFile">
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label">Select</label>
+                          <div class="col-sm-10">
+                            <select class="form-select" aria-label="Default select example">
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label">Submit Button</label>
+                          <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Submit Form</button>
+                          </div>
+                        </div>
+        
+                      </form><!-- End General Form Elements -->
+        
+                    </div>
+                  </div>
+  
+              <!-- Default Table -->
+  
+              <!-- End Default Table Example -->
+            </div>
+          </div>
+          <% } else if(type === 'edit') { %>
+                <!-- General Form Elements -->
+                <form id="formEditFood" enctype="multipart/form-data">
+                  <input type="hidden" id="inputId" value="<%= data.id_payment %>">
+                    
+                  
+                  <div class="row mb-3">
+                    <label for="Address" class="col-md-4 col-lg-3 col-form-label"
+                      >Status</label
+                    >
+                    <div class="col-md-8 col-lg-9">
+                      <select
+                        class="form-select"
+                        id="floatingSelect"
+                        aria-label="Floating label select example"
+                      >
+                        <option value="Proses" selected>Proses</option>
+                        <option value="Lunas">Lunas</option>
+                      </select>
+                    </div>
+                  </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Submit Button</label>
+                      <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Submit Form</button>
+                      </div>
+                    </div>
+    
+                  </form><!-- End General Form Elements -->
+          <% } else { %>
+            <div class="d-flex justify-content-start mb-2">
+                <a
+                  href="/admin/food?type=tambah"
+                  id="tambahCat"
+                  class="btn btn-primary"
+                >
+                  <span>Add Food</span>
+                  <i class="bi bi-plus"></i>
+                </a>
+              </div>
+            <table id="example" class="table table-striped" style="width: 100%">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Position</th>
-                  <th scope="col">Age</th>
-                  <th scope="col">Start Date</th>
-                  <th scope="col">Action</th>
+                  <th>Id</th>
+                  <th>Status</th>
+                  <th>Bukti pembayaran</th>
+                  
+                  <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Brandon Jacob</td>
-                  <td>Designer</td>
-                  <td>28</td>
-                  <td>2016-05-25</td>
-                  <td>
-                    <button class="btn btn-outline-secondary">
-                      <i class="bi bi-trash-fill"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Bridie Kessler</td>
-                  <td>Developer</td>
-                  <td>35</td>
-                  <td>2014-12-05</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Ashleigh Langosh</td>
-                  <td>Finance</td>
-                  <td>45</td>
-                  <td>2011-08-12</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Angus Grady</td>
-                  <td>HR</td>
-                  <td>34</td>
-                  <td>2012-06-11</td>
-                </tr>
-                <tr>
-                  <th scope="row">5</th>
-                  <td>Raheem Lehner</td>
-                  <td>Dynamic Division Officer</td>
-                  <td>47</td>
-                  <td>2011-04-19</td>
-                </tr>
-              </tbody>
             </table>
-            <!-- End Table with stripped rows -->
+            <% } %>
           </div>
         </div>
       </div>
@@ -94,5 +132,195 @@ include('../partials/adminSidebar') %>
 </main>
 <!-- End #main -->
 <!-- End #main -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#example").DataTable({
+      ajax: {
+        url: "/admin/api/datapayment",
+        type: "GET",
+      },
+      columns: [
+        {
+          data: null,
+          render: function (data, type, row, meta) {
+            // Mengambil nomor urut baris
+            var rowIndex = meta.row + meta.settings._iDisplayStart + 1;
+            return rowIndex;
+          },
+        },
+        { data: "status" },
+        {
+          data: "bukti_pembayaran",
+          render: function (data, type, row) {
+            return (
+              '<a href="' +
+              data +
+              '"><img class="img-fluid rounded" style="width: 80px" src="' +
+              data +
+              '" alt="Food Image" /></a>'
+            );
+          },
+        },
+        {
+          data: "id_payment",
+          render: function (data, type, row) {
+            var foodId = row.id; // Mengambil ID food dari data baris
 
+            // Tombol Hapus
+            var deleteButton =
+              '<button class="btn btn-outline-secondary delete-food-btn" data-food-id="' +
+              data +
+              '"><i class="bi bi-trash-fill"></i></button>';
+
+            // Tombol Edit
+            var editButton =
+              '<a class="btn btn-outline-secondary edit-food-btn" href="/admin/payment?type=edit&id=' +
+              data +
+              '"><i class="bi bi-pencil-fill"></i></a>';
+
+            return deleteButton + editButton;
+          },
+        },
+      ],
+    });
+  });
+
+  // delete button
+  $("#example").on("click", ".delete-food-btn", function () {
+    var foodId = $(this).data("food-id");
+    // Mengirim permintaan penghapusan menggunakan fetch atau AJAX
+    fetch("/admin/api/deletepayment/" + foodId, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle respon dari server (berhasil atau gagal)
+        if (data.statusCode === 200) {
+          Swal.fire("Good job!", "Data berhasil dihapus", "success");
+        }
+
+        // Lakukan tindakan lain jika diperlukan
+        // Misalnya, refresh tabel atau tampilkan notifikasi
+        $("#example").DataTable().ajax.reload();
+      })
+      .catch((error) => {
+        // Tangani kesalahan jika terjadi
+        if (error.statusCode === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+        }
+        console.error(error);
+      });
+    console.log(foodId);
+  });
+
+
+ 
+
+
+// form add food
+$(document).ready(function() {
+  // Mendengarkan pengiriman formulir
+  $("#formFood").on("submit", function(e) {
+    e.preventDefault();
+    
+    // Mendapatkan nilai dari input teks
+    var title = $("#inputTitle").val();
+    var summary = $("#inputSummary").val();
+    var price = $("#inputPrice").val();
+    var id_category = $(".form-select").val();
+    
+    // Mendapatkan nilai dari input file
+    var image = $("#formFile")[0].files[0];
+    if(!title || !summary || !price || !id_category || !image){
+      Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Form belum diisi",
+        });
+    }else{
+      // Membuat objek FormData untuk mengumpulkan data formulir
+      var formData = new FormData();
+      formData.append("title", title);
+      formData.append("summary", summary);
+      formData.append("price", price);
+      formData.append("images", image);
+      formData.append("id_category", id_category);
+      // console.log(image);
+      // Mengirimkan data ke rute /admin/api/createFood
+      fetch("/admin/api/createFood", {
+        method: "POST",
+        body: formData
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        // Menangani respons setelah berhasil membuat data
+        if(data.statusCode === 200){
+          Swal.fire({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Tambah Data'
+              })
+        }
+        console.log(data);
+      })
+      .catch(function(error) {
+        // Menangani kesalahan yang terjadi
+        console.error("Terjadi kesalahan:", error);
+      });
+    }
+  });
+});
+
+$(document).ready(function() {
+  // Mendengarkan pengiriman formulir
+  $("#formEditFood").on("submit", function(e) {
+    e.preventDefault();
+    
+    // Mendapatkan nilai dari input teks
+    var status = $(".form-select").val();
+    var id_food = $("#inputId").val();
+    
+    console.log(status);
+    // Membuat objek FormData untuk mengumpulkan data formulir
+    
+    
+    fetch("/admin/api/editpayment/"+id_food, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: status,
+      }),
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      // Menangani respons setelah berhasil membuat data
+      if(data.statusCode === 200){
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'Edit Data'
+            })
+      }
+      console.log(data);
+    })
+    .catch(function(error) {
+      // Menangani kesalahan yang terjadi
+      console.error("Terjadi kesalahan:", error);
+    });
+  });
+});
+
+</script>
 <%- include('../partials/adminFooter') %>

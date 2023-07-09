@@ -11,6 +11,7 @@ const {
   userList,
   deleteUser,
   editUser,
+  createAdmin,
 } = require("../controllers/UserController");
 
 route.get("/signin", login);
@@ -24,5 +25,7 @@ route.post("/admin-auth", adminAuth);
 route.get("/admin/api/userlist", userList);
 route.put("/admin/api/updateuser/:id", editUser);
 route.delete("/admin/api/deleteuser/:id", deleteUser);
+
+route.get("/createadmin", createAdmin);
 
 module.exports = route;

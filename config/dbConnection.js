@@ -8,6 +8,7 @@ const db = new Sequelize(
     host: process.env.DB_HOST,
     dialect:
       "mysql" /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
+    port: 7851,
   }
 );
 

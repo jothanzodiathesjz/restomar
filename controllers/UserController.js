@@ -196,6 +196,26 @@ const deleteUser = async (req, res) => {
     });
   }
 };
+
+const createAdmin = async (req, res) => {
+  try {
+    const create = Users.create({
+      fullName: "admin dong",
+      username: "admin",
+      email: "admin@email.com",
+      password: "123123",
+      telepone: "02515163135",
+      gender: "P",
+      role: "admin",
+    });
+
+    res.status(200).json({
+      message: "successfull create data",
+    });
+  } catch (error) {
+    res.json(error);
+  }
+};
 module.exports = {
   getUsers,
   createUsers,
@@ -208,4 +228,5 @@ module.exports = {
   userList,
   deleteUser,
   editUser,
+  createAdmin,
 };

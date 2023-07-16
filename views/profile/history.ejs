@@ -67,6 +67,12 @@ include('../partials/profileSidebar') %>
           </div>
         </div>
         <div class="row mt-2">
+          <div class="col-lg-3 col-md-4 label">Jam Reservasi</div>
+          <div class="col-lg-9 col-md-8" id="jamres">
+            : <%= data.orderData.tanggal_reservasi.toLocaleTimeString() %>
+          </div>
+        </div>
+        <div class="row mt-2">
           <div class="col-lg-3 col-md-4 label">Status Reservasi</div>
           <div class="col-lg-9 col-md-8">
             : <%= data.orderData.status_reservasi %>

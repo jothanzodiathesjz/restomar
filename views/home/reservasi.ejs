@@ -96,7 +96,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
                     <div class="form-floating date" id="date3">
                       <input
                         type="datetime-local"
-                        class="form-control datetimepicker-input"
+                        class="form-control"
                         id="datetime"
                       />
                       <label for="datetime">Date & Time</label>
@@ -105,7 +105,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
                   <div class="col-md-6">
                     <div class="form-floating">
                       <select class="form-select" id="select1"></select>
-                      <label for="select1">No Of Table</label>
+                      <label for="select1">No Table</label>
                     </div>
                   </div>
                 </div>
@@ -357,27 +357,84 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js
       const now = new Date();
       const formattedNow = now.toISOString().slice(0, 16);
       input.min = formattedNow;
+      let orderData;
 
+      var dataPemesanan = [
+        "2023-07-13T10:00",
+        "2023-07-13T11:00",
+        "2023-07-13T12:00",
+      ];
       $(document).ready(function () {
-        // Mengambil data dari API
-        $.ajax({
-          url: "/admin/api/tablelist",
-          method: "GET",
-          success: function (data) {
-            // Loop melalui data dan tambahkan opsi ke dalam elemen select
-            data.data.forEach(function (item) {
-              $("#select1").append(
-                $("<option>", {
-                  value: item.id_table,
-                  text: item.no_table,
-                })
-              );
+        var datetimeInput = $("#datetime");
+
+        // Menambahkan event listener menggunakan jQuery
+        datetimeInput.on("change", function () {
+          var datetimeValue = $(this).val();
+          var formattedDate = datetimeValue.replace("T", " ");
+
+          let orderData;
+          fetch("/admin/api/orderData", {
+            method: "GET",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              // Menyimpan data yang diterima ke dalam variabel
+              orderData = data.data
+                .filter((item) => item.status_reservasi !== "Selesai")
+                .map((item) => item.tanggal_reservasi);
+              // console.log("Data order:", orderData);
+              console.log(orderData);
+              var isPemesananAda = orderData.some(function (pemesanan) {
+                // Menghitung selisih waktu dalam jam
+                var selisihMenit =
+                  Math.abs(new Date(pemesanan) - new Date(datetimeValue)) /
+                  60000;
+                return selisihMenit <= 60;
+              });
+
+              // Menampilkan pesan berdasarkan hasil verifikasi
+              if (isPemesananAda) {
+                gagal(false);
+              } else {
+                console.log("Meja tersedia");
+                // Di sini Anda dapat melakukan tindakan lain jika diperlukan, misalnya melanjutkan pemesanan.
+              }
+            })
+            .catch((error) => {
+              console.error("Terjadi kesalahan:", error);
             });
-          },
-          error: function () {
-            console.log("Gagal mengambil data dari API.");
-          },
+
+          // Memeriksa apakah datetime yang dipilih sama atau selisih satu jam dengan data pemesanan
+
+          // Misalnya, Anda dapat mengirim nilainya ke server atau melakukan operasi lain dengan nilai tersebut.
         });
+        function gagal(e) {
+          if (!e) {
+            setTimeout(() => {
+              Swal.fire("Gagal", "Meja Sudah diBooking", "error");
+            }, 500);
+          }
+        }
+        // Mengambil data dari API
+        function getDataTable() {
+          fetch("/admin/api/tablelist", {
+            method: "GET",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              // Loop melalui data dan tambahkan opsi ke dalam elemen select
+              data.data.forEach((item) => {
+                const option = document.createElement("option");
+                option.value = item.id_table;
+                option.textContent = item.no_table;
+                document.getElementById("select1").appendChild(option);
+              });
+            })
+            .catch((error) => {
+              console.error("Gagal mengambil data dari API.", error);
+            });
+        }
+        getDataTable();
       });
 
       var selectedItems = [];
@@ -561,6 +618,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js
         });
 
         const date = $("#datetime").val();
+        var formattedDateTime = date.replace("T", " ");
         const table = $("#select1").val();
         console.log({ cartItems, date, table });
 
@@ -568,7 +626,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js
           dataOrder: {
             table_id: table,
             status_reservasi: "pending",
-            tanggal_reservasi: date,
+            tanggal_reservasi: formattedDateTime,
             id_user: "<%= idUser %>",
           },
           dataItem: cartItems,

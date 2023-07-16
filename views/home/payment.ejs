@@ -97,6 +97,14 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
                     </div>
                   </div>
                   <div class="row mt-2">
+                    <div class="col-lg-3 col-md-4 label">Jam pemesanan</div>
+                    <div class="col-lg-9 col-md-8">
+                      : <%=
+                      data.orderData.tanggal_reservasi.toLocaleTimeString() %> -
+                      selesai
+                    </div>
+                  </div>
+                  <div class="row mt-2">
                     <div class="col-lg-3 col-md-4 label">Status Reservasi</div>
                     <div class="col-lg-9 col-md-8">
                       : <%= data.orderData.status_reservasi %>

@@ -28,6 +28,7 @@ const {
   paymentData,
   ediPayment,
   deletePayment,
+  dashboard,
 } = require("../controllers/adminController");
 
 route.get("/admin", adminAuth, adminView);
@@ -68,4 +69,6 @@ route.post("/admin/api/createPayment", upload.single("images"), paymentCreate);
 route.get("/admin/api/datapayment", paymentData);
 route.put("/admin/api/editpayment/:id", ediPayment);
 route.delete("/admin/api/deletepayment/:id", deletePayment);
+
+route.get("/admin/api/dashboard", dashboard);
 module.exports = route;

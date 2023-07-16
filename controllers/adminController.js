@@ -670,3 +670,29 @@ exports.deletePayment = async (req, res) => {
     });
   }
 };
+
+exports.dashboard = async (req, res) => {
+  try {
+    const dataFood = await Food.count();
+    const dataTable = await Table.count();
+    const dataUser = await Users.count();
+    const dataOrder = await Order.count();
+    const dataPayment = await Payment.count();
+
+    return res.json({
+      statusCode: 200,
+      message: "successfully",
+      data: {
+        dataFood,
+        dataTable,
+        dataUser,
+        dataOrder,
+        dataPayment,
+      },
+    });
+  } catch (error) {
+    res.json({
+      message: "Error",
+    });
+  }
+};
